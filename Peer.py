@@ -22,12 +22,11 @@ from collections import deque
 
 #dictionary of port locations so servers can find eachother
 resourceLookup = dict()
-resourceLookup['I1','I2','I3','I4','I5','I6','I7'] = 6869
-resourceLookup['R1','R2','R3','R4','R5','R6','R7'] = 6870
-resourceLookup['J1','J2','J3','J4','J5','J6','J7'] = 6871
-resourceLookup['K1','K2','K3','K4','K5','K6','K7'] = 6868
-resourceLookup['J3'] = 6871
-resourceLookup['R1'] = 6870
+resourceLookup.update(dict.fromkeys(['I1','I2','I3','I4','I5','I6','I7'], 6869))
+resourceLookup.update(dict.fromkeys(['R1','R2','R3','R4','R5','R6','R7'], 6870))
+resourceLookup.update(dict.fromkeys(['J1','J2','J3','J4','J5','J6','J7'], 6871))
+resourceLookup.update(dict.fromkeys(['K1','K2','K3','K4','K5','K6','K7'], 6868))
+
 ##############################################################################
 class Peer():
    def __init__(self, name, policyFileName, resourceFileName, port):
