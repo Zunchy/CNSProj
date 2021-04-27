@@ -29,6 +29,12 @@ resourceLookup.update(dict.fromkeys(['K1','K2','K3','K4','K5','K6','K7'], 6868))
 
 ##############################################################################
 class Peer():
+
+   trueCount = int()
+   trueCount = 0
+
+   trueList = list()
+
    def __init__(self, name, policyFileName, resourceFileName, port):
       #set a name to peer
       self.name = name
@@ -109,8 +115,19 @@ class Peer():
    def processMessage(self, m):
       self.MRecieved.appendleft(m)
       if m.messageType == 'offer':
+         self.trueCount += 1
          self.resources[m.resource] = True
+         self.trueList.append(m.resource)
+      if self.trueCount > 1 and self.udp_port == 6869:
+         resourceToSend = ""
+         for policy in self.policies:
+            isUnlockedResource = all(item in self.policies[policy] for item in self.trueList)
+            if isUnlockedResource:
+               resourceToSend = self.resources[policy]
+         self.sendMessage(Message('offer', resourceToSend, self.udp_port, 6868, m.originalRequester), 6868)
+
       msgs = self.resolutionResolver(self.MRecieved, self.MSent)
+
       for msg in msgs:
          self.MSent.appendleft(msg)
          self.sendMessage(msg, msg.subject)
